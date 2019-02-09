@@ -5,7 +5,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className='app'>
           <HeaderHome/>
           <div className='conteudo'>
             <div class="ui placeholder segment">
