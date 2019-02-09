@@ -4,13 +4,13 @@
     height: 100px;
 }
 
-.ui.button {
+.menu .ui.button {
     color: white;
     background-color: transparent;
     border: 1px solid white;
 }
 
-.ui.button:hover {
+.menu .ui.button:hover {
     color: white;
     background-color: blue;
     border: 1px solid white;
