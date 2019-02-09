@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import HeaderHome from './header'
 
 class App extends Component {
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+          <HeaderHome/>
+          <div className='conteudo'>
+            <div class="ui placeholder segment">
+              <div class="ui icon header">
+                <i class="handshake outline icon"></i>
+                Vamos marcar aquele compromisso?
+              </div>
+              <div class="ui primary button">Add Compromisso</div>
+            </div>
+          </div>
+          <div className='footer'>
+              <p>© 2019 Copyright</p>
+          </div>
       </div>
     );
   }
