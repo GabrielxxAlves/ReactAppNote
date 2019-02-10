@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import HeaderHome from './header'
+import FooterHome from './footer'
 
 class App extends Component {
-
   render() {
     return (
       <div className='app'>
@@ -16,9 +16,7 @@ class App extends Component {
               <div class="ui primary button">Add Compromisso</div>
             </div>
           </div>
-          <div className='footer'>
-              <p>© 2019 Copyright</p>
-          </div>
+          <FooterHome/>
       </div>
     );
   }

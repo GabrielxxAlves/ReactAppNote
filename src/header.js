@@ -1,4 +1,5 @@
 import React from 'react'
+import Modal from './modal'
 
 const HeaderHome = (props) => {
     return (
@@ -10,9 +11,10 @@ const HeaderHome = (props) => {
                 </h2>
             </div>
             <div className='menu'>
-                <button className="ui button">Sign up</button>
+                <button className="ui button" id='btn_sign'>Sign up</button>
                 <button className="ui button">Login</button>
             </div>
+            <Modal/>
         </div>
     )
 }
