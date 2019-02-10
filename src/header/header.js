@@ -1,6 +1,8 @@
 import React from 'react'
 import Modal from './modal'
 
+
+
 const HeaderHome = (props) => {
     return (
         <div className='container'>

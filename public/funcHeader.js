@@ -1,6 +1,7 @@
+
 $(function () {
     $('#btn_sign').click(function() {
-        $('.ui.basic.modal').modal('show');
+       alert(1)
         $(this).blur()
     })
 })

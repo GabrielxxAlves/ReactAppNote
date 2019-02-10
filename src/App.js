@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import HeaderHome from './header'
-import FooterHome from './footer'
+import HeaderHome from './header/header'
+import FooterHome from './footer/footer'
 
 class App extends Component {
   render() {
