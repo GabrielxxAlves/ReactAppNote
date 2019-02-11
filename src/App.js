@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import HeaderHome from './header/header'
-import FooterHome from './footer/footer'
-
+import HeaderHome from './components/header/header'
+import FooterHome from './components/footer/footer'
+import Appointment from './components/appointment/appointment'
+import Login from './components/login/login'
+import { Switch, Route } from 'react-router-dom'
+ 
 class App extends Component {
   render() {
     return (
       <div className='app'>
           <HeaderHome/>
-          <div className='conteudo'>
-            <div class="ui placeholder segment">
-              <div class="ui icon header">
-                <i class="handshake outline icon"></i>
-                Vamos marcar aquele compromisso?
-              </div>
-              <div class="ui primary button">Add Compromisso</div>
-            </div>
-          </div>
+          <Switch>
+            <Route path='/' exact component={Appointment}/>
+            <Route path='/login' component={Login}/>
+          </Switch>
           <FooterHome/>
       </div>
     );

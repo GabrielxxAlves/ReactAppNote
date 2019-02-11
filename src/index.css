@@ -2,6 +2,7 @@
 
 @media only screen and (max-device-width: 676px) {
     .container { height: 200px; }
+    .divFormLogin{ max-width: 100%; }
 }
 
 .container {
@@ -32,12 +33,13 @@
     margin: 30px 60px;
 }
 
-.ui.header>.icon+.content {
+.ui.header .content {
     color: white;
+    font-size: 20px;
 }
 
-.conteudo {
-  
+#iconHand {
+ color: black; 
 }
 
 .ui.placeholder.segment {
@@ -57,4 +59,18 @@
     color: white;
     text-align: center;
     margin: 10px;
+}
+
+.divFormLogin {
+    border: 1px solid rgb(155, 107, 211);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 20%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.divBtnLogin {
+    width: 40%;
+    margin: auto;
 }
