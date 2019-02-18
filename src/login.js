@@ -54,13 +54,13 @@ class Login extends Component {
                     user.nome = dataUser.nome
                     user.sobrenome = dataUser.sobrenome
                     localStorage.setItem('user',JSON.stringify(user))
+                    setTimeout(() => {
+                        this.setState({
+                            isAuth: res
+                       })
+                    },1000)
+                    window.location.reload()
                 })
-                setTimeout(() => {
-                    this.setState({
-                        isAuth: res
-                   })
-                },1000)
-                window.location.reload()
             }
         })
     }

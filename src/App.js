@@ -29,9 +29,9 @@ class App extends Component {
           <HeaderHome/>
           <Switch>
             <Route path='/' exact component={Appointment}/>
-            <PrivateLogin path='/login' component={Login}/>
-            <PrivateAppointmentHome path='/appointmenthome' component={AppointmentHome}/>            
-            <PrivateLogin path='/privateLogin' component={(propos) => <h1>PRONTO</h1>}/>
+            <PrivateLogin exact path='/login' component={Login}/>
+            <PrivateAppointmentHome exact path='/appointmenthome' component={AppointmentHome}/>   
+            <Route render={ () => <Redirect to='/login'/> }/>         
           </Switch>
           <FooterHome/>
       </div>
