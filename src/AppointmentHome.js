@@ -1,51 +1,41 @@
 import React, {Component} from 'react'
 import { Menu } from 'semantic-ui-react'
+ 
 
+import AddAmigosPage from './AddAmigosPage'
+import AddCompromissosPage from './AddCompromissosPage'
+import CompromissosPage from './CompromissosPage'
 
-class MenuAppointment extends Component {
-    state = { activeItem: 'add amigo' }
+class AppointmentHome extends Component {
+    state = { activeItem: 'add amigos' }
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-    render(){   
+        render(){   
         const { activeItem } = this.state
         return (
             <div>
-                <Menu pointing secondary size='small' widths={4}>
+                <div>
+                <Menu pointing secondary size='small' widths={3}>
                     <Menu.Item 
-                        name='add amigo'
-                        active={activeItem === 'add amigo'}
+                        name='add amigos'
+                        active={activeItem === 'add amigos'}
                         onClick={this.handleItemClick}
                         />
+                    <Menu.Item
+                        name='add compromissos'
+                        active={activeItem === 'add compromissos'}
+                        onClick={this.handleItemClick}
+                    />
                     <Menu.Item
                         name='compromissos'
                         active={activeItem === 'compromissos'}
                         onClick={this.handleItemClick}
                     />
-                    <Menu.Item
-                        name='add'
-                        active={activeItem === 'add'}
-                        onClick={this.handleItemClick}
-                     />
-                    <Menu.Item
-                        name='configuração'
-                        active={activeItem === 'configuração'}
-                        onClick={this.handleItemClick}
-                    />
-                </Menu>
-            </div>
-        )
-    }
-}
-
-class AppointmentHome extends Component {
-    render(){   
-        return (
-            <div>
-                <MenuAppointment/>
-                <div className='embreve'>
-                <h1>BEM-VINDO, BICHO</h1>
-                <br/>
-                <h3>Aguardem a outra versão</h3>
-                </div>
+                    </Menu>
+                 </div>
+                 {this.state.activeItem === 'add amigos' ? <AddAmigosPage/> : null }
+                 {this.state.activeItem === 'add compromissos' ? <AddCompromissosPage/> : null }
+                 {this.state.activeItem === 'compromissos' ? <CompromissosPage/> : null }
+                 
             </div>
         )
     }

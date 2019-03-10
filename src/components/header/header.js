@@ -42,23 +42,31 @@ class UserLogado extends Component  {
 }
 
 class HeaderHome extends Component  {
-
-    state = {
-        nome: null,
-        sobrenome: null,
-        isActive: false
+    constructor() {
+        super()
+        
+        this.state = {
+            nome: undefined,
+            sobrenome: undefined,
+            isActive: false
+        }
     }
-    componentDidMount(){
-       if(localStorage.getItem('user')){
+
+    componentDidMount() {
+          this.loadUser()
+    }
+
+    loadUser() {
+        if(localStorage.getItem('user')){
             const userGet = JSON.parse(localStorage.getItem('user'))
             this.setState({
                 nome: userGet.nome,
                 sobrenome: userGet.sobrenome,
                 isActive: true
             })
-       }
+       }  
     }
-    
+
     render() {
         return (
             <div className='container'>

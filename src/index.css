@@ -77,7 +77,21 @@
     text-align: center;
 }
 
-.embreve {
-    text-align: center;
-    padding-top: 150px;
+.divListFriends {
+    margin-top: 30px;
+    margin-left: 30%;
+    width: 500px;
+}
+
+.divFormStep {
+    display: inline-block;
+    width: 440px;
+    margin-left: 33%;
+}
+.divBtnStepAmigos {
+    margin-left: 30%;
+}
+
+.div_btn_compromissoPendentes {
+    display: flex;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Message } from 'semantic-ui-react'
+import { Form, Message } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 const AuthLogin = require('./components/auth')
 
@@ -33,20 +33,18 @@ class Login extends Component {
        })
 
         const user = {
-            uid: undefined,
-            nome: undefined,
-            sobrenome: undefined,
             email: this.refs.email.value,
             senha: this.refs.senha.value
         }
         
-        const isVerify = AuthLogin.isAuth(user.email,user.senha)
-        isVerify.then(res => {
+        AuthLogin.isAuth(user.email,user.senha)
+        .then(res => {
+            console.log(res)
             this.setState({
-                 isError: res
+                    isError: res, loading: res
             })
             if(res) {
-                const uid = AuthLogin.idLogin()
+                const uid = AuthLogin.uidUsers()
                 user.uid = uid
                 AuthLogin.readDatabase(uid)
                 .then(read => {
@@ -57,7 +55,7 @@ class Login extends Component {
                     setTimeout(() => {
                         this.setState({
                             isAuth: res
-                       })
+                        })
                     },1000)
                     window.location.reload()
                 })
@@ -80,9 +78,9 @@ class Login extends Component {
                     </Form.Field>
                     <Form.Field>
                         <label>Senha</label>
-                        <input type='password' ref='senha' placeholder='Senha' />
+                        <input type='password' ref='senha' placeholder='Senha'  />
                     </Form.Field>
-                        <Button inverted fluid color='blue' type='button' size='tiny' onClick={this.login}>LOGIN</Button>
+                        <button  className='ui button inverted fluid blue tiny' onClick={this.login}>LOGIN</button>
                     </Form>
                 </div>
             </div>

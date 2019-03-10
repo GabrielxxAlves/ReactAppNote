@@ -8,7 +8,7 @@ const isAuth = async(email,senha) => {
         return true
     }
     catch(error) {
-        console.log('error', error)
+        // error
         return false
     }
 }
@@ -40,8 +40,9 @@ const createUser = async(nome, sobrenome ,email,senha) => {
     try {
         
         await auth.createUserWithEmailAndPassword(email, senha)
-        const id = auth.currentUser.uid
-        await database.ref('users/'+ id).set({
+        const uid = auth.currentUser.uid
+        await database.ref('users/'+ uid).set({
+            uid: uid,
             nome: nome,
             sobrenome: sobrenome,
             email: email
@@ -53,14 +54,13 @@ const createUser = async(nome, sobrenome ,email,senha) => {
     }
 }
 
-const idLogin = () => {
-    const id = auth.currentUser.uid
-    return id
+const uidUsers = () => {
+    return auth.currentUser.uid
 }
 
 const readDatabase = async(uid) => {
-    const userName = await database.ref('/users/' + uid).once('value')
-    return userName
+    return await database.ref('/users/' + uid).once('value')
 }
 
-export {isAuth, isVerifyUser, signOut, onAuthStateChanged,createUser, idLogin, readDatabase}
+
+export {isAuth, isVerifyUser, signOut, onAuthStateChanged,createUser, uidUsers, readDatabase, auth}
