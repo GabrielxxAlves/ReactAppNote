@@ -81,7 +81,8 @@ const GetMeusCompromissos = async() => {
                     tipoCompromisso: compromissos[key].tipoCompromisso,
                     descricao: compromissos[key].descricao,
                     local: compromissos[key].local,
-                    dataHora: compromissos[key].dataHora,
+                    data: compromissos[key].data,
+                    hora: compromissos[key].hora,
                     participantes: compromissos[key].participantes
                 }
                 arrayCompromissos.push(objCompromisso)
@@ -115,7 +116,8 @@ const GetCompromissosPendentes = async() => {
                     tipoCompromisso: compromissosPendentes[key].tipoCompromisso,
                     descricao: compromissosPendentes[key].descricao,
                     local: compromissosPendentes[key].local,
-                    dataHora: compromissosPendentes[key].dataHora,
+                    data: compromissosPendentes[key].data,
+                    hora: compromissosPendentes[key].hora,
                     participantes: compromissosPendentes[key].participantes,
                     criadoUid: compromissosPendentes[key].criadoUid,
                     nomeCriador:compromissosPendentes[key].nomeCriador,

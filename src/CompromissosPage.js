@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Divider, Grid, Segment, List, Icon, Accordion, Header, Button, Popup, Image } from 'semantic-ui-react'
+import { Divider, Grid, Segment, List, Icon, Accordion, Header, Button, Popup, Image, Label } from 'semantic-ui-react'
 
 const GetData = require('./components/database/GetDatabase')
 const database = require('./components/database/database')
@@ -12,22 +12,21 @@ class ListMeusCompromissos extends Component {
       compromisso: this.props.compromisso
     }
   }
-
   render() {
     return(
       <List divided relaxed>
       <List.Item>
-        <List.Icon name='github' size='large' verticalAlign='middle' />
+        <List.Icon name='travel' size='large' verticalAlign='middle' />
         <List.Content>
           <List.Header>
-            {this.state.compromisso.nomeCompromisso} / 
-            {this.state.compromisso.tipoCompromisso} / 
-            {this.state.compromisso.local} {this.state.compromisso.dataHora}
+            {this.state.compromisso.nomeCompromisso} - {this.state.compromisso.data} - {this.state.compromisso.hora}  
           </List.Header>
-          <List.Description>{this.state.compromisso.descricao}</List.Description>
+          <List.Description>Tipo: {this.state.compromisso.tipoCompromisso}</List.Description>
+          <List.Description>Local: {this.state.compromisso.local}</List.Description>
+          <List.Description>Descrição: {this.state.compromisso.descricao}</List.Description>
           
           {this.props.compromisso.participantes && 
-            <Popup trigger={  <List.Description>Participantes</List.Description>} flowing hoverable>
+            <Popup trigger={  <List.Description> <b>Participantes</b> <Icon name='user circle outline' /></List.Description>} flowing hoverable>
             <Grid centered divided columns={this.state.compromisso.participantes.length}>
               {
                 this.state.compromisso.participantes.map((item,index) => {
@@ -82,10 +81,13 @@ class ListCompromissosPendentes extends Component {
       tipoCompromisso: this.state.compromissoPendentes.tipoCompromisso,
       descricaoCompromisso:this.state.compromissoPendentes.descricao,
       localCompromisso: this.state.compromissoPendentes.local,
-      dataHoraCompromisso: this.state.compromissoPendentes.dataHora, 
+      dataCompromisso: this.state.compromissoPendentes.data, 
+      horaCompromisso: this.state.compromissoPendentes.hora, 
       status: 'aceito'
     }
     database.aceitoOrRecusado(objData)
+
+    window.location.reload()
   }
 
   recusadoCompromisso() {
@@ -95,6 +97,8 @@ class ListCompromissosPendentes extends Component {
       status: 'recusado'
     }
     database.aceitoOrRecusado(objData)
+
+    window.location.reload()
   }
 
   render() {
@@ -109,8 +113,8 @@ class ListCompromissosPendentes extends Component {
         <p> Criador: {this.state.compromissoPendentes.nomeCriador}</p>
         <p> Tipo do compromisso : {this.state.compromissoPendentes.tipoCompromisso}</p>
         <p> Descrição : {this.state.compromissoPendentes.descricao}</p>
-        <p> Local: {this.state.compromissoPendentes.local} Data: {this.state.compromissoPendentes.dataHora}</p>
-        <p> Participantes : </p>
+        <p> Local: {this.state.compromissoPendentes.local}</p>
+        <p> Data: {this.state.compromissoPendentes.data}   Hora: {this.state.compromissoPendentes.hora}</p>
         <p hidden ref='compromissoUid'>{this.state.compromissoPendentes.compromissoUid}</p>
         <p hidden ref='criadoUid'>{this.state.compromissoPendentes.criadoUid}</p>
         <div className="div_btn_compromissoPendentes">
@@ -132,21 +136,27 @@ class CompromissosPage extends Component {
       compromissos: undefined,
       compromissoPendentes: undefined,
       isVerifyCompromissos: false,
-      isVerifyCompromissosPendentes: false
+      isVerifyCompromissosPendentes: false,
+      loadingMeusCompromissos: true,
+      loadingMeusCompromissosPendentes: true
     }
   }
   componentDidMount() {
     GetData.GetMeusCompromissos()
     .then(res => {
       if(res.length !== 0 ) {
-        this.setState({compromissos: res, isVerifyCompromissos: true})
+        this.setState({compromissos: res, isVerifyCompromissos: true, loadingMeusCompromissos: false})
+      } else {
+        this.setState({ loadingMeusCompromissos: false})
       }
     })
     
     GetData.GetCompromissosPendentes()
     .then(res => {
       if(res.length !== 0) {
-        this.setState({compromissoPendentes: res, isVerifyCompromissosPendentes: true})
+        this.setState({compromissoPendentes: res, isVerifyCompromissosPendentes: true, loadingMeusCompromissosPendentes: false})
+      } else {
+        this.setState({loadingMeusCompromissosPendentes: false})
       }
     })
   }
@@ -157,27 +167,28 @@ class CompromissosPage extends Component {
               <Divider vertical>Or</Divider>
                 <Grid.Row verticalAlign='middle'>
                   <Grid.Column>
-                  <Segment placeholder>
-                    <Header>
-                        Meus Compromissos
+                  <Segment placeholder loading={this.state.loadingMeusCompromissos}>
+                    <Header textAlign='center'>
+                      Meus Compromissos
                     </Header>
                     {this.state.isVerifyCompromissos ?
                         this.state.compromissos.map((element, index) => {
                           return <ListMeusCompromissos compromisso={element} key={index}/>
                         })
-                       : null }
+                       : <Label>Nenhum Compromisso</Label> }
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header>
+                  <Segment placeholder loading={this.state.loadingMeusCompromissosPendentes}>
+                    <Header textAlign='center'>
                       Compromissos Pendentes
                     </Header>
-                    {this.state.isVerifyCompromissosPendentes ? 
-                      this.state.compromissoPendentes.map((item, index) => {
-                        return <ListCompromissosPendentes compromissoPendentes={item} key={index}/>
-                      })
-                      : null
-                    }
+                      {this.state.isVerifyCompromissosPendentes ? 
+                        this.state.compromissoPendentes.map((item, index) => {
+                          return <ListCompromissosPendentes compromissoPendentes={item} key={index}/>
+                        })
+                        : <Label>Nenhum Compromisso Pendente</Label> }
+                      </Segment>
               </Grid.Column>
             </Grid.Row>
           </Grid>

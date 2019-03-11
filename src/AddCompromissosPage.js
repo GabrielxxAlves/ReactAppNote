@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Button, Icon, Header, Step, Form, Dropdown, Progress, Modal} from 'semantic-ui-react'
+import { Button, Icon, Header, Step, Form, Dropdown, Progress, Modal, Message} from 'semantic-ui-react'
 
 const GetFriends = require('./components/database/GetDatabase')
 const database = require('./components/database/database')
@@ -101,7 +101,8 @@ class AddCompromissosPage extends Component {
         descricao: undefined,
         amigos: undefined,
         local: undefined,
-        dataHora: undefined
+        data: undefined,
+        hora: undefined
     }
     constructor() {
         super()
@@ -116,7 +117,16 @@ class AddCompromissosPage extends Component {
             isVerify: false,
             progress: false,
             percentProgress:0,
-            openModal: false
+            openModal: false,
+            objFormField: { 
+                errorForm: false,
+                errorNomeCompromisso: false, 
+                errorTipoCompromisso: false, 
+                errorDescricaoCompromisso: false,
+                errorAmigos: false,
+                errorLocalCompromisso: false,
+                errorDataHoraCompromisso: false
+            }
         }
         this.stepCompromisso = this.stepCompromisso.bind(this)
     }
@@ -138,26 +148,77 @@ class AddCompromissosPage extends Component {
             stepTerminei: false
         })
     }
+
+    resetObjFormFied = () => {
+        this.setState({ 
+            objFormField: { 
+                errorForm: false, 
+                errorNomeCompromisso: false,
+                errorTipoCompromisso: false, 
+                errorDescricaoCompromisso: false,
+                errorAmigos: false,
+                errorLocalCompromisso: false,
+                errorDataHoraCompromisso: false
+            }
+        })
+    }
     
     stepCompromisso = () => {
-        this.resetState()
-        this.setState({next: 'stepCompromisso', stepAmigos: true })
+        if(this.refs.nomeCompromisso.value === '') {
+            this.setState({ objFormField: { errorForm: true, errorNomeCompromisso: true}})
+            return
+        }
+        if(this.refs.tipoCompromisso.state.value === '') {
+            this.setState({ objFormField: { errorForm: true, errorTipoCompromisso: true}})
+            return
+        }
+        if(this.refs.descricao.value === '') {
+            this.setState({ objFormField: { errorForm: true, errorDescricaoCompromisso: true}})
+            return
+        }
 
         this.objCompromisso.nomeCompromisso = this.refs.nomeCompromisso.value
         this.objCompromisso.tipoCompromisso = this.refs.tipoCompromisso.state.value
         this.objCompromisso.descricao = this.refs.descricao.value
+        
+        this.resetState()
+        this.setState({next: 'stepCompromisso', stepAmigos: true })
     }
 
     stepAmigos = () => {
+        if(this.refs.dropdownAmigos.state.value.length === 0) {
+            this.setState({ objFormField: { errorForm: true, errorAmigos: true}})
+            return
+        }
+
+        this.objCompromisso.amigos = this.refs.dropdownAmigos.state.value
+
         this.resetState()
         this.setState({next: 'stepAmigos', stepLocal: true })
-        this.objCompromisso.amigos = this.refs.dropdownAmigos.state.value
     }
     stepLocal = () => {
+   
+        if(this.refs.local.value === '') {
+            this.setState({ objFormField: { errorForm: true, errorLocalCompromisso: true}})
+            return
+        }
+
+        if(this.refs.dataHora.value === '') {
+            this.setState({ objFormField: { errorForm: true, errorDataHoraCompromisso: true}})
+            return
+        }
+
+        this.objCompromisso.local = this.refs.local.value
+
+        let dataArray = this.refs.dataHora.value.substring(0,10).split('-')
+        let data = `${dataArray[2]}/${dataArray[1]}/${dataArray[0]}`
+        let hora = this.refs.dataHora.value.substring(11,16)
+
+        this.objCompromisso.data = data
+        this.objCompromisso.hora = hora
+
         this.resetState()
         this.setState({next: 'stepLocal', stepTerminei: true })
-        this.objCompromisso.local = this.refs.local.value
-        this.objCompromisso.dataHora = this.refs.dataHora.value
     }
     stepTerminei = () => {
         this.resetState()
@@ -185,49 +246,64 @@ class AddCompromissosPage extends Component {
                 <StepCompromisso next={this.state.next}/>
                 { this.state.stepCompromisso &&
                 <div className='divFormStep'>
-                <Form>
-                    <Form.Field>
-                        <label>Nome compromisso</label>
-                        <input placeholder='Nome compromisso' ref='nomeCompromisso' />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Tipo  de compromisso</label>
-                        <Dropdown placeholder='Tipo de compromisso' fluid selection options={tipoCompromisso} ref='tipoCompromisso' />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Descrição</label>
-                        <textarea placeholder='Descrição' rows='2' ref='descricao'/>
-                    </Form.Field>
-                    <Button type='button' inverted color='green' onClick={this.stepCompromisso} >Proximo</Button>
-                </Form></div>
+                    <Form error={this.state.objFormField.errorForm}>
+                        <Form.Field error={this.state.objFormField.errorNomeCompromisso}>
+                            <label>Nome compromisso</label>
+                            <input placeholder='Nome compromisso' ref='nomeCompromisso' onFocus={this.resetObjFormFied} />
+                        </Form.Field>
+                        <Form.Field  error={this.state.objFormField.errorTipoCompromisso}>
+                            <label>Tipo  de compromisso</label>
+                            <Dropdown placeholder='Tipo de compromisso' fluid selection options={tipoCompromisso} ref='tipoCompromisso'  onFocus={this.resetObjFormFied} />
+                        </Form.Field>
+                        <Form.Field  error={this.state.objFormField.errorDescricaoCompromisso}>
+                            <label>Descrição</label>
+                            <textarea placeholder='Descrição' rows='2' ref='descricao'  onFocus={this.resetObjFormFied}/>
+                        </Form.Field>
+                        <Button type='button' inverted color='green' onClick={this.stepCompromisso} >Proximo</Button>
+                        <Message error
+                        header='Opa, aconteceu algo de errado'
+                        content='Preenchar os campo que está em vermelho.'
+                        />
+                    </Form>
+                </div>
                 }
                 {this.state.stepAmigos ?
                     this.state.isVerify ? 
                     <div>
-                    <div className='divListFriends'>
-                        <p>Selecione seus amigos</p>
-                        <Dropdown placeholder='Amigos' fluid multiple selection options={this.state.friends} ref='dropdownAmigos' />
-                        </div><br/><br/>
-                            <div className='divBtnStepAmigos'>
-                                <Button type='button' inverted color='green' onClick={this.stepAmigos}>Proximo</Button>
-                            </div>
+                        <div className='divListFriends'>
+                        <Form error={this.state.objFormField.errorForm}>
+                            <Form.Field error={this.state.objFormField.errorAmigos}>
+                                <label>Selecione seus amigos</label>
+                                <Dropdown placeholder='Amigos' fluid multiple selection options={this.state.friends} ref='dropdownAmigos' onFocus={this.resetObjFormFied}/>
+                            </Form.Field>   
+                            <br/>
+                            <Button type='button' inverted color='green' onClick={this.stepAmigos}>Proximo</Button>
+                            <Message error 
+                            header='Opa, aconteceu algo de errado'
+                            content='Escolha pelo menos um amiguinho.'
+                            />
+                        </Form>
                         </div>
-                        : <p>Não tem amigos ;(</p>
-                            : null
+                    </div> 
+                    : <p>Não tem amigos ;(</p> : null
                 }
                 {this.state.stepLocal && 
                     <div className='divFormStep'>
-                    <Form>
-                        <Form.Field>
-                            <label>Local</label>
-                            <input placeholder='Local' ref='local' />
-                        </Form.Field>
-                        <Form.Field>
-                            <label>Data</label>
-                            <input type='datetime-local' placeholder='Data' ref='dataHora' />
-                        </Form.Field>
-                        <Button type='button' inverted color='green' onClick={this.stepLocal}>Proximo</Button>
-                    </Form>
+                        <Form error={this.state.objFormField.errorForm}>
+                            <Form.Field error={this.state.objFormField.errorLocalCompromisso}>
+                                <label>Local</label>
+                                <input placeholder='Local' ref='local' onFocus={this.resetObjFormFied} />
+                            </Form.Field>
+                            <Form.Field error={this.state.objFormField.errorDataHoraCompromisso}>
+                                <label>Data</label>
+                                <input type='datetime-local' placeholder='Data' ref='dataHora' onFocus={this.resetObjFormFied} />
+                            </Form.Field>
+                            <Button type='button' inverted color='green' onClick={this.stepLocal}>Proximo</Button>
+                            <Message error
+                            header='Opa, aconteceu algo de errado'
+                            content='Preenchar os campo que está em vermelho.'
+                            />
+                        </Form>
                     </div>
                 }
                 {this.state.stepTerminei && 

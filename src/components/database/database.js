@@ -58,7 +58,8 @@ const addCompromisso = async(newCompromisso) => {
             tipoCompromisso: newCompromisso.tipoCompromisso,
             descricao: newCompromisso.descricao,
             local: newCompromisso.local,
-            dataHora: newCompromisso.dataHora,
+            data: newCompromisso.data,
+            hora: newCompromisso.hora,
             participantes: participantes
         }
 
@@ -123,7 +124,8 @@ const aceitoOrRecusado = (objData) => {
             tipoCompromisso: objData.tipoCompromisso,
             descricao: objData.descricaoCompromisso,
             local: objData.localCompromisso,
-            dataHora: objData.dataHoraCompromisso,
+            data: objData.dataCompromisso,
+            hora: objData.horaCompromisso
         },(err) => {
             if(err) {
                 console.log(err)
